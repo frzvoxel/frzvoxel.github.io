@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>tuxset</title>
+    <title>tuxset :: reverse engineering</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -30,13 +30,13 @@
             height: 100vh;
             z-index: 0;
             pointer-events: none;
-            opacity: 0.8;
+            opacity: 0.6;
         }
 
         .content-wrapper {
             position: relative;
             z-index: 10;
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
             margin: 0 auto;
             padding: 2rem 2rem 2rem 80px;
@@ -47,10 +47,10 @@
 
         .container {
             width: 100%;
-            border: 1px solid #33ff33;
+            border: 1px solid #ffb86b;
             padding: 1.8rem;
-            box-shadow: 0 0 25px rgba(51, 255, 51, 0.2);
-            background-color: rgba(10, 10, 10, 0.7);
+            box-shadow: 0 0 25px rgba(255, 184, 107, 0.15);
+            background-color: rgba(10, 10, 10, 0.8);
             backdrop-filter: blur(3px);
             border-radius: 0;
         }
@@ -58,13 +58,13 @@
         .github-panel {
             position: fixed;
             top: 0;
-            left: -330px;
-            width: 300px;
+            left: -350px;
+            width: 320px;
             height: 100vh;
             background-color: #111;
-            border-right: 2px solid #33ff33;
-            box-shadow: 4px 0 20px rgba(0, 255, 0, 0.3);
-            transition: left 0.4s ease;
+            border-right: 2px solid #ffb86b;
+            box-shadow: 4px 0 20px rgba(255, 184, 107, 0.2);
+            transition: left 0.35s ease;
             z-index: 1000;
             padding: 20px;
             overflow-y: auto;
@@ -80,13 +80,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #33ff33;
+            border-bottom: 1px solid #ffb86b;
             padding-bottom: 10px;
             margin-bottom: 20px;
         }
 
         .panel-header h3 {
-            color: #33ff33;
+            color: #ffb86b;
             font-size: 1.2rem;
             font-weight: normal;
         }
@@ -107,43 +107,13 @@
             color: #ff3333;
         }
 
-        .toggle-btn {
-            position: fixed;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            background-color: #33ff33;
-            color: #0a0a0a;
-            border: none;
-            width: 32px;
-            height: 70px;
-            font-size: 1.6rem;
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 1100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: left 0.4s ease, background-color 0.2s;
-            box-shadow: 2px 2px 12px rgba(0, 255, 0, 0.5);
-            border-radius: 0;
-        }
-
-        .toggle-btn:hover {
-            background-color: #55ff55;
-        }
-
-        .toggle-btn.open {
-            left: 300px;
-        }
-
         .repo-list {
             list-style: none;
         }
 
         .repo-item {
             margin-bottom: 15px;
-            border-bottom: 1px dotted #33ff33;
+            border-bottom: 1px dotted #ffb86b;
             padding-bottom: 8px;
             opacity: 0;
             transform: translateX(-10px);
@@ -154,7 +124,7 @@
         }
 
         .repo-item:hover {
-            background: rgba(51, 255, 51, 0.1);
+            background: rgba(255, 184, 107, 0.1);
         }
 
         @keyframes slideInRepo {
@@ -180,19 +150,35 @@
         .repo-loading, .repo-error {
             text-align: center;
             padding: 20px;
-            color: #33ff33;
+            color: #ffb86b;
         }
 
         .repo-error { color: #ff5e5e; }
 
+        .avatar-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-left: 8px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 0;
+            border: 2px solid #ffb86b;
+            box-shadow: 0 0 15px rgba(255, 184, 107, 0.3);
+            margin-right: 1rem;
+        }
+
         .header {
-            border-bottom: 1px dashed #33ff33;
+            border-bottom: 1px dashed #ffb86b;
             padding-bottom: 1rem;
             margin-bottom: 2rem;
         }
 
         .header h1 {
-            color: #33ff33;
+            color: #ffb86b;
             font-size: 2rem;
             font-weight: normal;
             display: flex;
@@ -201,29 +187,35 @@
             letter-spacing: 1px;
         }
 
-        .main-arrow {
-            display: inline-block;
-            color: #ffb86b;
-            font-size: 2rem;
-            animation: bounce 1.8s infinite;
-            cursor: pointer;
-            transition: color 0.2s;
-            border-radius: 0;
-            padding: 0;
-        }
-
-        .main-arrow:hover {
-            color: #ffcc99;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(5px); }
-        }
-
         .header .sub {
             color: #888;
             font-size: 0.9rem;
+        }
+
+        .toggle-panel-btn {
+		    position: relative;
+			left: -280px;
+            background: none;
+            border: 2px solid #ffb86b;
+            color: #ffb86b;
+            width: 32px;
+            height: 50px;
+            font-size: 1.6rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 0 10px rgba(255, 184, 107, 0.3);
+            border-radius: 0;
+            margin-left: auto;       
+            margin-right: 0;     
+        }
+
+        .toggle-panel-btn:hover {
+            background-color: rgba(255, 184, 107, 0.1);
+            border-color: #ffcc99;
+            color: #ffcc99;
         }
 
         .section {
@@ -232,19 +224,19 @@
         }
 
         .section:hover {
-            background: linear-gradient(90deg, rgba(51,255,51,0.05), transparent);
-            border-left: 2px solid #33ff33;
+            background: linear-gradient(90deg, rgba(255,184,107,0.05), transparent);
+            border-left: 2px solid #ffb86b;
         }
 
         .section h2 {
-            color: #33ff33;
+            color: #ffb86b;
             font-size: 1.2rem;
             font-weight: normal;
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             gap: 6px;
-            border-bottom: 1px solid #33ff33;
+            border-bottom: 1px solid #ffb86b;
             padding-bottom: 3px;
         }
 
@@ -278,13 +270,13 @@
         }
 
         .highlight[data-type="keyword"] {
-            background: rgba(51, 255, 51, 0.15);
-            color: #33ff33;
+            background: rgba(255, 184, 107, 0.15);
+            color: #ffb86b;
             border-radius: 4px;
         }
         .highlight[data-type="keyword"]:hover {
-            background: rgba(51, 255, 51, 0.3);
-            box-shadow: 0 0 8px #33ff33;
+            background: rgba(255, 184, 107, 0.3);
+            box-shadow: 0 0 8px #ffb86b;
         }
 
         .highlight[data-type="string"] {
@@ -312,14 +304,30 @@
             box-shadow: none;
             color: #aaa;
         }
+		
+		.funfact-link {
+			color: #ffb86b;
+			text-decoration: none;
+			cursor: pointer;
+			padding: 1px 3px;
+			background: rgba(255, 184, 107, 0.1);
+			border-radius: 4px;
+			display: inline-block;
+			margin: 5px 0;
+			font-size: 1.1rem;
+		}
+
+		.funfact-link:hover {
+			background: rgba(255, 184, 107, 0.2);
+		}
 
         .note {
             color: #888;
             font-size: 0.85rem;
-            border-left: 2px solid #33ff33;
+            border-left: 2px solid #ffb86b;
             padding-left: 1rem;
             margin-top: 1.5rem;
-            background: rgba(51,255,51,0.02);
+            background: rgba(255,184,107,0.02);
             padding: 0.8rem;
             border-radius: 0;
         }
@@ -327,32 +335,32 @@
         .footer {
             margin-top: 2rem;
             padding-top: 1rem;
-            border-top: 1px dashed #33ff33;
+            border-top: 1px dashed #ffb86b;
             text-align: center;
             color: #666;
             font-size: 0.8rem;
         }
 
         .footer a {
-            color: #33ff33;
+            color: #ffb86b;
             text-decoration: none;
             cursor: pointer;
             transition: color 0.2s;
             padding: 2px 4px;
-            background: rgba(51, 255, 51, 0.1);
+            background: rgba(255, 184, 107, 0.1);
             border-radius: 4px;
         }
 
         .footer a:hover {
-            color: #55ff55;
-            background: rgba(51, 255, 51, 0.2);
+            color: #ffcc99;
+            background: rgba(255, 184, 107, 0.2);
         }
 
         .cursor {
             display: inline-block;
             width: 8px;
             height: 1.2rem;
-            background-color: #33ff33;
+            background-color: #ffb86b;
             vertical-align: middle;
             margin-left: 4px;
             animation: blink 1s infinite;
@@ -375,19 +383,8 @@
         }
 
         ::selection {
-            background: #33ff33;
+            background: #ffb86b;
             color: #0a0a0a;
-        }
-
-        .yt-embed {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-            opacity: 0;
         }
     </style>
 </head>
@@ -406,72 +403,67 @@
         </div>
     </div>
 
-    <button class="toggle-btn" id="toggleBtn" onclick="togglePanel()">&gt;</button>
-
     <div class="content-wrapper">
         <div class="container">
+            <div class="avatar-container">
+                <img src="https://yt3.googleusercontent.com/njITrTxm4KzE-1isIzf3Impe6tuQQww967Rbrm1-_Wf3P8ed_yidsmAYDTOUbNvrETtem3HHxA=s900-c-k-c0x00ffffff-no-rj" alt="avatar" class="avatar">
+                <button class="toggle-panel-btn" onclick="togglePanel()" id="toggleBtn">☰</button>
+                <span style="color:#888; margin-left: auto;">_reverse</span>
+            </div>
+
             <div class="header">
                 <h1>
-                    <span class="main-arrow" onclick="startConfetti(50)">▶</span> tuxset
-                    <span class="cursor"></span>
+                    tuxset <span class="cursor"></span>
                 </h1>
-                <div class="sub">13 y.o. • living somewhere • <a href="https://t.me/nowotx" target="_blank" style="background:rgba(51,255,51,0.1); padding:2px 6px; border-radius:4px;">@nowotx</a></div>
+                <div class="sub">reverser • <a href="https://t.me/nowotx" target="_blank" style="background:rgba(255,184,107,0.1); padding:2px 6px; border-radius:4px;">@nowotx</a></div>
             </div>
+			
 
             <div class="section">
-                <h2><span class="arrow">▶</span> languages</h2>
+                <h2><span class="arrow">▶</span> [tools]</h2>
                 <p>
-                    <span class="highlight" data-type="keyword">[C</span>,
-                    <span class="highlight" data-type="keyword">Python</span>,
-                    <span class="highlight" data-type="keyword">Lua]</span>
-                    <span class="highlight" data-type="comment">— actually I know more, but these are the main</span>
+                    <span class="highlight" data-type="keyword">Binary Ninja</span>,
+                    <span class="highlight" data-type="keyword">x64dbg</span>
+                    <span class="highlight" data-type="comment">— main</span>
+                </p>
+                <p>
+                    <span class="highlight" data-type="keyword">C</span>,
+                    <span class="highlight" data-type="keyword">Maybe cpp</span>,
+                    <span class="highlight" data-type="keyword">Assembly Language (AMD)</span>
+                    <span class="highlight" data-type="comment">— for patching</span>
                 </p>
             </div>
 
             <div class="section">
-                <h2><span class="arrow">▶</span> tools & engines</h2>
-                <p><span class="highlight" data-type="keyword">Godot</span> <span class="highlight" data-type="comment">— open source 4 life</span></p>
-                <p><span class="highlight" data-type="keyword">Blender</span> <span class="highlight" data-type="comment">— 3D stuff sometimes</span></p>
-                <p>
-                    <span class="highlight" data-type="keyword">Nvim</span>
-                    <span class="highlight" data-type="comment">— edit war? no, just use what works</span>
-                </p>
+                <h2><span class="arrow">▶</span> [current projects]</h2>
+                <p><span class="highlight" data-type="keyword" >None</span> <span class="highlight" data-type="comment"></span></p>
             </div>
 
             <div class="section">
-                <h2><span class="arrow">▶</span> operating systems</h2>
+                <h2><span class="arrow">▶</span> [operating system]</h2>
                 <p>
-                    <span class="highlight" data-type="keyword">Arch</span>,
-                    <span class="highlight" data-type="string">maybe windows</span>
-                    <span class="highlight" data-type="comment">— linux master race, but windows for some games</span>
+                    <!-- <span class="highlight" data-type="keyword"></span>, -->  <!-- Deleted. -->
+                    <span class="highlight" data-type="string">Windows 11 22H2</span>
+                    <!-- <span class="highlight" data-type="comment">— dual boot for reversing both worlds</span> --> <!-- Deleted. -->
                 </p>
-                <p>Daily driver: <span class="highlight" data-type="keyword">Arch + DWM</span> <span class="highlight" data-type="comment">(because I like to rice everything)</span></p>
+                <!-- <p>WM: <span class="highlight" data-type="keyword">DWM</span> <span class="highlight" data-type="comment">(rice everything)</span></p> --> <!-- Deleted. -->
             </div>
 
             <div class="section">
-                <h2><span class="arrow">▶</span> dont dni me plz</h2>
+                <h2><span class="arrow">▶</span> [dont dni]</h2>
                 <p>
-                    <span class="highlight" data-type="string" onclick="window.open('https://www.youtube.com/watch?v=AuKR2fQbMBk', '_blank')">people with non-traditional sexual orientation</span>
-                    <span class="highlight" data-type="comment">— if that's your whole personality, I'm not interested</span>
+                    <span class="highlight" data-type="string" onclick="window.open('https://www.youtube.com/watch?v=AuKR2fQbMBk', '_blank')">non-binary stuff</span>
+                    <span class="highlight" data-type="comment">— if that's your whole personality</span>
                 </p>
-                <p><span class="highlight" data-type="keyword" onclick="startConfetti(30)">but if you're just a normal person — i wanna friend u</span></p>
-            </div>
-
-            <div class="section">
-                <h2><span class="arrow">▶</span> now playing</h2>
-                <div id="spotify-widget" style="min-height: 60px;">
-                    <div id="spotify-track" class="highlight" data-type="comment" style="margin-bottom: 2px;">⏳ loading...</div>
-                    <div id="spotify-artist" class="highlight" data-type="comment" style="font-size: 0.9rem;"></div>
-                    <div id="spotify-progress" style="font-size: 0.8rem; color: #6f8a9f; margin-top: 4px;"></div>
-                </div>
+                <p><span class="highlight" data-type="keyword" onclick="startConfetti(30)">if u normal ppl - Thanks.</span></p>
             </div>
 
             <div class="note">
-                <p>⚠️ <span class="highlight" data-type="comment">This site uses no trackers, no cookies.</span></p>
+                <p> <span class="highlight" data-type="comment">no trackers, no cookies lol.</span></p>
                 <p>
-                    Browser: <span class="highlight" data-type="keyword" onclick="window.open('https://www.mozilla.org/firefox/', '_blank')">Firefox</span> •
-                    Search: <span class="highlight" data-type="keyword" onclick="window.open('https://www.startpage.com/', '_blank')">Startpage</span> •
-                    DNS: <span class="highlight" data-type="keyword" onclick="window.open('https://nextdns.io/', '_blank')">NEXTDNS</span>
+                    Browser: <span class="highlight" data-type="keyword" onclick="window.open('https://www.mozilla.org/firefox/', '_blank')">Edge</span> •
+                    Search: <span class="highlight" data-type="keyword" onclick="window.open('https://www.startpage.com/', '_blank')">Google</span>
+                    <!-- DNS: <span class="highlight" data-type="keyword" onclick="window.open('https://nextdns.io/', '_blank')">NEXTDNS</span> --> <!-- Deleted. -->
                 </p>
             </div>
 
@@ -479,62 +471,25 @@
                 <p>
                     <a onclick="window.open('https://github.com/tuxset', '_blank'); startConfetti(20)">github/tuxset</a>
                     <a onclick="window.open('mailto:tux@xyecoc.com'); startConfetti(10)">tux@xyecoc.com</a>
-                    <a onclick="startConfetti(60); return false;">don't click</a>
-                </p>
+                    <a onclick="alertmessage">don't click</a>
+					<a id="funfact-link" onclick="return false">Fun fact: </a>
+                </p> 
                 <p style="margin-top:8px;">tuxset © 2026</p>
             </div>
         </div>
     </div>
 
     <script>
-        const SPOTIFY_API_URL = 'https://nowplaying-api.tinyrobot.co/playbackstate?key=be25122d-5582-4adb-8d8a-d5eee4de1041';
-
-        async function fetchSpotify() {
-            try {
-                const response = await fetch(SPOTIFY_API_URL);
-                const data = await response.json();
-                
-                if (data.isPlaying && data.item) {
-                    const trackName = data.item.name;
-                    const artists = data.item.artists.map(a => a.name).join(', ');
-                    const progress = formatProgress(data.progressMs, data.item.durationMs);
-                    
-                    document.getElementById('spotify-track').innerHTML = `🎵 <span class="string">${trackName}</span>`;
-                    document.getElementById('spotify-artist').innerHTML = `<span class="keyword">${artists}</span> <span class="comment" style="font-size:0.8rem;">(now)</span>`;
-                    document.getElementById('spotify-progress').innerHTML = progress;
-                } else {
-                    document.getElementById('spotify-track').innerHTML = '🎵 nothing playing';
-                    document.getElementById('spotify-artist').innerHTML = '';
-                    document.getElementById('spotify-progress').innerHTML = '';
-                }
-            } catch (error) {
-                document.getElementById('spotify-track').innerHTML = '🎵 error loading';
-            }
-        }
-
-        function formatProgress(progressMs, durationMs) {
-            if (!progressMs || !durationMs) return '';
-            
-            const progressSec = Math.floor(progressMs / 1000);
-            const durationSec = Math.floor(durationMs / 1000);
-            
-            const pMin = Math.floor(progressSec / 60);
-            const pSec = progressSec % 60;
-            const dMin = Math.floor(durationSec / 60);
-            const dSec = durationSec % 60;
-            
-            return `⏱️ ${pMin}:${pSec.toString().padStart(2, '0')} / ${dMin}:${dSec.toString().padStart(2, '0')}`;
-        }
-
-        fetchSpotify();
-        setInterval(fetchSpotify, 3000);
-
         const canvas = document.getElementById('bgCanvas');
         const ctx = canvas.getContext('2d');
         let width, height;
         let mouseX = 0, mouseY = 0;
         let particles = [];
-
+		
+		let facts = ["А вы знали что бегемот это бегемот?", "Серега плахой ewww", "dima krytoooi!!", "Пайтон это C, C это библеотека над ассемблером, Ассемблер это инструкция машшиного кода. делайте выводы.", "пайтон фу", "я не играю в роблокс бро.", "пж сабнись на мой ютуб @iium1n", "Не сдавайся Бро!", "паровозик чух чух"]
+		
+		var count = 0
+			
         function initCanvas() {
             width = window.innerWidth;
             height = window.innerHeight;
@@ -549,17 +504,24 @@
                     radius: Math.random() * 2.5 + 0.5,
                     speedX: (Math.random() - 0.5) * 0.3,
                     speedY: (Math.random() - 0.5) * 0.3,
-                    color: `rgba(51, 255, 51, ${Math.random() * 0.4 + 0.3})`
+                    color: `rgba(255, 184, 107, ${Math.random() * 0.4 + 0.3})`
                 });
             }
         }
+		
+		function funfactfunction() {
+		    let fact = Math.floor(Math.random() * facts.length);
+			
+			document.getElementById('funfact-link').textContent = "fun fact:" + facts[fact];
+			console.log(fact)
+		}
 
         function drawBackground() {
             ctx.clearRect(0, 0, width, height);
             
             const gradient = ctx.createLinearGradient(0, 0, width, height);
             gradient.addColorStop(0, '#0a0a0a');
-            gradient.addColorStop(1, '#1a2a1a');
+            gradient.addColorStop(1, '#1a1510');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, width, height);
 
@@ -572,7 +534,7 @@
             ctx.translate(offsetX, offsetY);
 
             for (let i = 0; i < 200; i++) {
-                ctx.fillStyle = `rgba(51, 255, 51, ${Math.random() * 0.15})`;
+                ctx.fillStyle = `rgba(255, 184, 107, ${Math.random() * 0.15})`;
                 ctx.fillRect(
                     Math.random() * width,
                     Math.random() * height,
@@ -670,20 +632,36 @@
                 drawConfetti();
             }
         }
+		
+		
+		
+		function alertmessage() {
+            count += 1
+		    console.log(count)
+			if (count == 1) {
+			   alert('И ради чего? Не кликай больше.')
+			} else if (count == 2) {
+			   alert('чего ты ждешь?')
+			} else if (count == 3) {
+			   alert('я вижу ты упертый. нажмешь все то 100 раз получишь сюрприз))')
+			} else if (count <= 100) {
+			   alert('Счётик:' + count)
+			} else if (count >= 100) {
+			   setInterval(() => {
+			      startConfetti(50);
+			   }, 200);
+			}
+		}
 
         const panel = document.getElementById('githubPanel');
         const toggleBtn = document.getElementById('toggleBtn');
 
         function togglePanel() {
             const isOpen = panel.classList.toggle('open');
-            toggleBtn.classList.toggle('open');
-            toggleBtn.textContent = isOpen ? '<' : '>';
         }
 
         function closePanel() {
             panel.classList.remove('open');
-            toggleBtn.classList.remove('open');
-            toggleBtn.textContent = '>';
         }
 
         document.addEventListener('keydown', function(event) {
@@ -741,6 +719,7 @@
         }
 
         window.onload = () => {
+		    funfactfunction();
             loadRepos();
             updateVisitCounter();
         };
